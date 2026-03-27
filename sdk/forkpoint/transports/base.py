@@ -1,0 +1,19 @@
+"""
+Abstract Transport interface. All storage backends implement this protocol.
+"""
+
+from __future__ import annotations
+
+from typing import Protocol, runtime_checkable
+
+from forkpoint.models.events import Fork, ReplayBundle, Run, Snapshot
+
+
+@runtime_checkable
+class Transport(Protocol):
+    def start_run(self, run: Run) -> None: ...
+    def end_run(self, run: Run) -> None: ...
+    def emit_snapshot(self, snapshot: Snapshot) -> None: ...
+    def record_fork(self, fork: Fork) -> None: ...
+    def flush(self) -> None: ...
+    def build_replay_bundle(self, run_id: str) -> ReplayBundle: ...
